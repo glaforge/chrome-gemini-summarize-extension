@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gemini Summarizer Options</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; max-width: 400px;}
+    div { margin-bottom: 1em; }
+    label { display: block; margin-bottom: 0.5em; }
+    input { width: 100%; padding: 0.5em; box-sizing: border-box; }
+    button { padding: 0.7em 1.2em; border: none; background-color: #007bff; color: white; cursor: pointer; border-radius: 4px; }
+    button:hover { background-color: #0056b3; }
+    #status { color: green; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Gemini Summarizer Options</h1>
+  <p>Please enter your Google AI Gemini API key below. You can create a new key at <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>.</p>
+  <div>
+    <label for="apiKey">Gemini API Key:</label>
+    <input type="password" id="apiKey" name="apiKey">
+  </div>
+  <div>
+    <button id="save">Save</button>
+  </div>
+  <div id="status"></div>
+  <script src="options.js"></script>
+</body>
+</html>
