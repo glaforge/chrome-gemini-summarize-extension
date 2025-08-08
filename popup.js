@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const goToOptionsButton = document.getElementById('go-to-options');
   const summarizeButton = document.getElementById('summarize');
   const shrinkButton = document.getElementById('shrink');
+  const socialButton = document.getElementById('social');
   const copyButton = document.getElementById('copy');
   const summaryContainer = document.getElementById('summary-container');
   const errorContainer = document.getElementById('error-container');
@@ -30,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let rawSummary = '';
   const converter = new showdown.Converter();
   const summarizeButtonOriginalHTML = summarizeButton.innerHTML;
+  const sparkleIconHTML = summarizeButton.querySelector('svg').outerHTML;
+  let currentAction = 'summarize';
 
   // --- Initial Setup Check ---
   chrome.storage.sync.get('apiKey', ({ apiKey }) => {
@@ -55,6 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
     shrinkButton.addEventListener('click', () => {
       if (!rawSummary) return;
       startProcess({ action: 'shrink', text: rawSummary });
+    });
+
+    socialButton.addEventListener('click', () => {
+      if (!rawSummary) return;
+      startProcess({ action: 'social', text: rawSummary });
     });
 
     copyButton.addEventListener('click', () => {
@@ -83,19 +91,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Core Functions ---
     function startProcess(request) {
-      setLoadingState(true);
+      currentAction = request.action;
+      setLoadingState(true, request.action);
       const selectedLanguage = langToggle.checked ? 'French' : 'English';
       request.language = selectedLanguage;
       chrome.runtime.sendMessage(request);
     }
 
-    function setLoadingState(isLoading) {
+    function setLoadingState(isLoading, action = 'summarize') {
       summarizeButton.disabled = isLoading;
       shrinkButton.disabled = isLoading;
+      socialButton.disabled = isLoading;
       copyButton.disabled = isLoading;
 
       if (isLoading) {
-        summarizeButton.textContent = 'Summarizing...';
+        let loadingText = 'Summarizing...';
+        if (action === 'shrink') {
+          loadingText = 'Shrinking summary...';
+        } else if (action === 'social') {
+          loadingText = 'Crafting social post...';
+        }
+        summarizeButton.innerHTML = sparkleIconHTML + loadingText;
         rawSummary = '';
         summaryContainer.innerHTML = '';
         errorContainer.innerHTML = '';
@@ -116,11 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (message.type === 'summaryChunk') {
         loader.style.display = 'none';
         rawSummary += message.chunk;
-        summaryContainer.innerHTML = converter.makeHtml(rawSummary);
+        if (currentAction === 'social') {
+          summaryContainer.innerText = rawSummary;
+        } else {
+          summaryContainer.innerHTML = converter.makeHtml(rawSummary);
+        }
       } else if (message.type === 'summaryComplete') {
         setLoadingState(false);
         copyButton.disabled = !rawSummary;
         shrinkButton.disabled = !rawSummary;
+        socialButton.disabled = !rawSummary;
       } else if (message.type === 'summaryError') {
         // The API key error is now handled on startup, but this will catch other errors.
         handleError(message.error);

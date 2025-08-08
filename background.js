@@ -22,21 +22,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         throw new Error('API key not found. Please set it in the options page.');
       }
 
-      let prompt;
-      const language = request.language || 'English';
+      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!activeTab || !activeTab.id) throw new Error('Could not get active tab.');
 
-      if (request.action === 'summarize') {
-        const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (!activeTab || !activeTab.id) throw new Error('Could not get active tab.');
-        if (activeTab.url?.startsWith('chrome://')) throw new Error('Cannot summarize Chrome internal pages.');
-
+      // Fetch page content for all actions to provide context.
+      let pageText = '';
+      if (activeTab.url && !activeTab.url.startsWith('chrome://')) {
         // 1. Try to get selected text first
         const selectionInjection = await chrome.scripting.executeScript({
           target: { tabId: activeTab.id },
           files: ['selection.js'],
         });
 
-        let pageText = '';
         if (selectionInjection && selectionInjection[0] && selectionInjection[0].result) {
           pageText = selectionInjection[0].result;
         }
@@ -48,13 +45,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             files: ['Readability.js', 'content.js'],
           });
 
-          if (!readabilityInjection || readabilityInjection.length === 0 || !readabilityInjection[0]) {
-            throw new Error('Failed to inject content script into the page.');
+          if (readabilityInjection && readabilityInjection.length > 0 && readabilityInjection[0] && readabilityInjection[0].result) {
+            pageText = readabilityInjection[0].result;
           }
-          pageText = readabilityInjection[0].result;
         }
+      }
 
-        // 3. Handle cases where no content could be found by any method
+      let prompt;
+      const language = request.language || 'English';
+
+      if (request.action === 'summarize') {
+        if (activeTab.url?.startsWith('chrome://')) {
+          throw new Error('Cannot summarize Chrome internal pages.');
+        }
+        // Handle cases where no content could be found by any method
         if (pageText === null || pageText === undefined || !pageText.trim()) {
           chrome.runtime.sendMessage({ type: 'summaryError', error: "Could not find any text on this page to summarize." });
           return;
@@ -74,7 +78,30 @@ No need for filler text, or introductory sentence like "Here is a summary..." or
 Make it as short as possible, using bullet points.
 No need for filler text, or introductory sentence like "Here is a summary..." or "Voici un résumé..."
 
-"${request.text}"`;
+"${request.text}"
+
+For reference, here's the full original content of the article before summarization:
+${pageText}`;
+      } else if (request.action === 'social') {
+        if (!request.text) throw new Error('No text provided to generate a social media post.');
+        if (!activeTab.url) throw new Error('Could not get active tab URL.');
+
+        prompt = `You are a social media manager. Based on the following text, write a short social media post to promote the article from this page.
+The post should be engaging and encourage people to click the link.
+The post should be short, as it should fit in a tweet.
+Use emojis if it makes sense.
+Mention why this article is important, why it's relevant today, if it's something new and interesting to share and why.
+Use short hashtags when possible. Hashtags should be used inline with the text if possible, not just at the end of the post.
+The tone of the post should be factual and professional, avoiding overly excited language (e.g., "awesome", "crazy", "incredible").
+Avoid using first-person pronouns like "I", "we", "our", or "us", as the person sharing the link is not the author of the article.
+The language of the post should be ${language}.
+At the end of the post, add the link to the article: ${activeTab.url}
+
+Here's the article summary:
+"${request.text}"
+
+For reference, here's the full original content of the article before summarization:
+${pageText}`;
       } else {
         return;
       }

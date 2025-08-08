@@ -23,6 +23,7 @@
       }
       #summarize,
       #copy,
+      #social,
       #shrink {
         padding: 0.8em;
         border: none;
@@ -46,17 +47,17 @@
       #summarize:hover {
         background-color: #0056b3;
       }
-      #copy, #shrink {
+      #copy, #social, #shrink {
         background-color: #6c757d;
       }
-      #copy:hover, #shrink:hover {
+      #copy:hover, #social:hover, #shrink:hover {
         background-color: #5a6268;
       }
-      #copy:disabled, #shrink:disabled {
+      #copy:disabled, #social:disabled, #shrink:disabled {
         background-color: #adb5bd;
         cursor: not-allowed;
       }
-      #copy svg, #shrink svg {
+      #copy svg, #social svg, #shrink svg {
         width: 1.2em;
         height: 1.2em;
         vertical-align: middle;
@@ -204,6 +205,11 @@
           <button id="shrink" disabled title="Shrink summary">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25" />
+            </svg>
+          </button>
+          <button id="social" disabled title="Suggest social media post">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.186 2.25 2.25 0 0 0-3.933 2.186Z" />
             </svg>
           </button>
           <button id="copy" disabled title="Copy summary">
