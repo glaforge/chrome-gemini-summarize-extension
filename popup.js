@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const summaryContainer = document.getElementById('summary-container');
   const errorContainer = document.getElementById('error-container');
   const langToggle = document.getElementById('lang-toggle-checkbox');
+  const summaryFormatToggle = document.getElementById('summary-format-toggle-checkbox');
   const loader = document.querySelector('.loader-container');
 
   let rawSummary = '';
@@ -88,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     langToggle.addEventListener('change', saveLanguageChoice);
+    summaryFormatToggle.addEventListener('change', saveSummaryFormatChoice);
 
     // --- Core Functions ---
     function startProcess(request) {
@@ -95,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setLoadingState(true, request.action);
       const selectedLanguage = langToggle.checked ? 'French' : 'English';
       request.language = selectedLanguage;
+      const selectedFormat = summaryFormatToggle.checked ? 'bullet points' : 'free flow text';
+      request.format = selectedFormat;
       chrome.runtime.sendMessage(request);
     }
 
@@ -160,6 +164,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // --- Summary Format Preference Logic ---
+    function saveSummaryFormatChoice() {
+      const format = summaryFormatToggle.checked ? 'bullet points' : 'free flow text';
+      chrome.storage.sync.set({ preferredFormat: format });
+    }
+
+    function restoreSummaryFormatChoice() {
+      chrome.storage.sync.get({ preferredFormat: 'free flow text' }, (items) => {
+        summaryFormatToggle.checked = items.preferredFormat === 'bullet points';
+      });
+    }
+
     restoreLanguageChoice();
+    restoreSummaryFormatChoice();
+  }
+});
+
+// --- Context Menu Listener ---
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'summarizeSelection') {
+    startProcess({ action: 'summarize', text: request.text });
   }
 });

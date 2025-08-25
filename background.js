@@ -53,6 +53,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
       let prompt;
       const language = request.language || 'English';
+      const format = request.format || 'free flow text';
 
       if (request.action === 'summarize') {
         if (activeTab.url?.startsWith('chrome://')) {
@@ -64,17 +65,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           return;
         }
 
-        prompt = `Summarize the text below in ${language}.
+        if (format === 'bullet points') {
+          prompt = `Summarize the text below in ${language}.
 Focus on the key points and main ideas.
 Keep it concise and easy to read.
 Stay concise, use bullet points, don't bother to use full sentences.
 No need for filler text, or introductory sentence like "Here is a summary..." or "Voici un résumé..."
 
 "${pageText}"`;
+        } else {
+          prompt = `Summarize the text below in ${language}.
+Focus on the key points and main ideas.
+Keep it concise and easy to read.
+Use full sentences and a narrative style.
+No need for filler text, or introductory sentence like "Here is a summary..." or "Voici un résumé..."
+
+"${pageText}"`;
+        }
 
       } else if (request.action === 'shrink') {
         if (!request.text) throw new Error('No text provided to shrink.');
-        prompt = `Summarize the following text in ${language} in an even more concise way.
+        if (format === 'bullet points') {
+          prompt = `Summarize the following text in ${language} in an even more concise way.
 Make it as short as possible, using bullet points.
 No need for filler text, or introductory sentence like "Here is a summary..." or "Voici un résumé..."
 
@@ -82,6 +94,16 @@ No need for filler text, or introductory sentence like "Here is a summary..." or
 
 For reference, here's the full original content of the article before summarization:
 ${pageText}`;
+        } else {
+          prompt = `Summarize the following text in ${language} in an even more concise way.
+Make it as short as possible, using full sentences and a narrative style.
+No need for filler text, or introductory sentence like "Here is a summary..." or "Voici un résumé..."
+
+"${request.text}"
+
+For reference, here's the full original content of the article before summarization:
+${pageText}`;
+        }
       } else if (request.action === 'social') {
         if (!request.text) throw new Error('No text provided to generate a social media post.');
         if (!activeTab.url) throw new Error('Could not get active tab URL.');

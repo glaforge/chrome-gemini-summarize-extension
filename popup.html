@@ -71,6 +71,15 @@
       .lang-toggle-container .lang-label {
         font-size: 1.5em;
       }
+      .summary-format-toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+      .summary-format-toggle-container .format-label {
+        width: 24px;
+        height: 24px;
+      }
       .toggle-switch {
         position: relative;
         display: inline-block;
@@ -184,6 +193,23 @@
             <span class="slider"></span>
           </label>
           <span class="lang-label">🇫🇷</span>
+        </div>
+        <div class="summary-format-toggle-container">
+          <span class="format-label" title="Free flow text">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h10" />
+            </svg>
+          </span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="summary-format-toggle-checkbox" />
+            <span class="slider"></span>
+          </label>
+          <span class="format-label" title="Bullet points">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h11" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 6v.01M5 12v.01M5 18v.01" />
+            </svg>
+          </span>
         </div>
         <div class="buttons-container">
           <button id="summarize">
