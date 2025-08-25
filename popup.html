@@ -47,17 +47,25 @@
       #summarize:hover {
         background-color: #0056b3;
       }
-      #copy, #social, #shrink {
+      #copy,
+      #social,
+      #shrink {
         background-color: #6c757d;
       }
-      #copy:hover, #social:hover, #shrink:hover {
+      #copy:hover,
+      #social:hover,
+      #shrink:hover {
         background-color: #5a6268;
       }
-      #copy:disabled, #social:disabled, #shrink:disabled {
+      #copy:disabled,
+      #social:disabled,
+      #shrink:disabled {
         background-color: #adb5bd;
         cursor: not-allowed;
       }
-      #copy svg, #social svg, #shrink svg {
+      #copy svg,
+      #social svg,
+      #shrink svg {
         width: 1.2em;
         height: 1.2em;
         vertical-align: middle;
@@ -124,7 +132,7 @@
         border: 1px solid #ddd;
         background-color: #fff;
         padding: 0.8em;
-        height: 360px;
+        height: 350px;
         overflow-y: auto;
         word-wrap: break-word;
         color: #444;
@@ -166,8 +174,12 @@
         animation: spin 1s linear infinite;
       }
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
       #setup-container {
         display: flex;
@@ -196,8 +208,18 @@
         </div>
         <div class="summary-format-toggle-container">
           <span class="format-label" title="Free flow text">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h10" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 6h16M4 10h16M4 14h10M4 18h10"
+              />
             </svg>
           </span>
           <label class="toggle-switch">
@@ -205,9 +227,23 @@
             <span class="slider"></span>
           </label>
           <span class="format-label" title="Bullet points">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h11M9 12h11M9 18h11" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 6v.01M5 12v.01M5 18v.01" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 6h11M9 12h11M9 18h11"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 6v.01M5 12v.01M5 18v.01"
+              />
             </svg>
           </span>
         </div>
@@ -229,13 +265,33 @@
             Summarize
           </button>
           <button id="shrink" disabled title="Shrink summary">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25"
+              />
             </svg>
           </button>
           <button id="social" disabled title="Suggest social media post">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.186 2.25 2.25 0 0 0-3.933 2.186Z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.186 2.25 2.25 0 0 0-3.933 2.186Z"
+              />
             </svg>
           </button>
           <button id="copy" disabled title="Copy summary">
@@ -256,16 +312,19 @@
         </div>
       </div>
       <div id="summary-container">
-          <div class="loader-container" style="display: none;">
-            <div class="loader"></div>
-          </div>
+        <div class="loader-container" style="display: none">
+          <div class="loader"></div>
         </div>
-        <div id="error-container" class="error"></div>
+      </div>
+      <div id="error-container" class="error"></div>
     </div>
 
-    <div id="setup-container" style="display: none;">
+    <div id="setup-container" style="display: none">
       <h3>Welcome to Gemini Summarizer</h3>
-      <p>To get started, please set your Google AI Gemini API key in the options page.</p>
+      <p>
+        To get started, please set your Google AI Gemini API key in the options
+        page.
+      </p>
       <button id="go-to-options" class="error-button">Set API Key</button>
     </div>
 
