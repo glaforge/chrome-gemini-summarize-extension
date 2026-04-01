@@ -17,10 +17,12 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   (async () => {
     try {
-      const { apiKey } = await chrome.storage.sync.get('apiKey');
+      const { apiKey, modelName } = await chrome.storage.sync.get({ apiKey: '', modelName: 'gemini-2.5-flash' });
       if (!apiKey) {
         throw new Error('API key not found. Please set it in the options page.');
       }
+
+      const activeModelName = modelName || 'gemini-2.5-flash';
 
       const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (!activeTab || !activeTab.id) throw new Error('Could not get active tab.');
@@ -128,7 +130,7 @@ ${pageText}`;
         return;
       }
 
-      await streamGeminiApi(apiKey, prompt);
+      await streamGeminiApi(apiKey, activeModelName, prompt);
 
     } catch (error) {
       console.error('Summarization Error:', error);
@@ -155,8 +157,8 @@ function findMatchingBrace(str, start) {
   return -1; // Not found
 }
 
-async function streamGeminiApi(apiKey, prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?key=${apiKey}`;
+async function streamGeminiApi(apiKey, modelName, prompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',

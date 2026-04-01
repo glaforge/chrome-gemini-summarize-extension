@@ -17,9 +17,10 @@
 // Saves options to chrome.storage
 const saveOptions = () => {
   const apiKey = document.getElementById('apiKey').value;
+  const modelName = document.getElementById('modelName').value || 'gemini-2.5-flash';
 
   chrome.storage.sync.set(
-    { apiKey: apiKey },
+    { apiKey: apiKey, modelName: modelName },
     () => {
       // Update status to let user know options were saved.
       const status = document.getElementById('status');
@@ -35,10 +36,13 @@ const saveOptions = () => {
 // stored in chrome.storage.
 const restoreOptions = () => {
   chrome.storage.sync.get(
-    { apiKey: '' },
+    { apiKey: '', modelName: 'gemini-2.5-flash' },
     (items) => {
       if (items.apiKey) {
         document.getElementById('apiKey').value = items.apiKey;
+      }
+      if (items.modelName) {
+        document.getElementById('modelName').value = items.modelName;
       }
     }
   );
